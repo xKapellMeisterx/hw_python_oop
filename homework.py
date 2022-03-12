@@ -72,8 +72,8 @@ class Running(Training):
         """Получить количество затраченных калорий."""
         self.coeff_calorie_1 = (
             (18 * self.get_mean_speed() - 20)
-             * self.weight / self.M_IN_KM
-             * self.duration * self.HOUR_TO_MIN)
+            * self.weight / self.M_IN_KM
+            * self.duration * self.HOUR_TO_MIN)
         return self.coeff_calorie_1
 
 
