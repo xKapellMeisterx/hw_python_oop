@@ -95,9 +95,9 @@ class SportsWalking(Training):
         """Получить количество затраченных калорий."""
         self.coeff_calorie_2 = (
             (0.035 * self.weight
-             + (self.get_mean_speed() ** 2 // self.height)
-             * 0.029 * self.weight) * self.duration
-             * self.HOUR_TO_MIN)
+            + (self.get_mean_speed() ** 2 // self.height)
+            * 0.029 * self.weight) * self.duration
+            * self.HOUR_TO_MIN)
         return self.coeff_calorie_2
 
 
