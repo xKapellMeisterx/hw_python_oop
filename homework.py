@@ -1,24 +1,36 @@
 class InfoMessage:
     """Базовый класс тренировки."""
-    training_type: str
-    duration: float
-    distance: float
-    speed: float
-    calories: float
+
+    def __init__(self,
+                 training_type: str,
+                 duration: float,
+                 distance: float,
+                 speed: float,
+                 calories: float,
+                 ) -> None:
+        self.training_type = training_type
+        self.duration = duration
+        self.distance = distance
+        self.speed = speed
+        self.calories = calories
 
     def get_message(self) -> str:
         """Информация о выполненной тренировке."""
         return (
-            f"Тип тренировки: {self.training_type}; Длительность: {self.duration} ч.; Дистанция: {self.distance} км.;"
-            f" Ср. скорость: {self.speed} км/ч; Потрачено ккал: {self.calories}"
+            f"Тип тренировки: {self.training_type};"
+            f" Длительность: {self.duration:.3f} ч.;"
+            f" Дистанция: {self.distance:.3f} км;"
+            f" Ср. скорость: {self.speed:.3f} км/ч;"
+            f" Потрачено ккал: {self.calories:.3f}."
         )
 
 
 class Training:
     """Базовый класс тренировки."""
-    duration: float
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
+    HOUR_TO_MIN: int = 60
+    training_type: str = ''
 
     def __init__(self,
                  action: int,
@@ -43,7 +55,7 @@ class Training:
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        return InfoMessage(self.traning_type,
+        return InfoMessage(self.training_type,
                            self.duration,
                            self.get_distance(),
                            self.get_mean_speed(),
@@ -58,7 +70,9 @@ class Running(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        self.coeff_calorie_1 = (18 * self.get_mean_speed() - 20) * self.weight / self.M_IN_KM * self.duration * 60
+        self.coeff_calorie_1 = (18 * self.get_mean_speed() - 20) \
+                               * self.weight / self.M_IN_KM \
+                               * self.duration * self.HOUR_TO_MIN
         return self.coeff_calorie_1
 
 
@@ -78,7 +92,10 @@ class SportsWalking(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        self.coeff_calorie_2 = (0.035 * self.weight + (self.get_mean_speed() ** 2 // self.height))
+        self.coeff_calorie_2 = (0.035 * self.weight
+                                + (self.get_mean_speed() ** 2 // self.height)
+                                * 0.029 * self.weight) \
+                               * self.duration * self.HOUR_TO_MIN
         return self.coeff_calorie_2
 
 
@@ -92,20 +109,22 @@ class Swimming(Training):
                  action: int,
                  duration: float,
                  weight: float,
-                 lenght_pool: float,
+                 length_pool: float,
                  count_pool: float,
                  ) -> None:
         Training.__init__(self, action, duration, weight)
-        self.lenght_pool = lenght_pool
+        self.length_pool = length_pool
         self.count_pool = count_pool
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
-        return self.lenght_pool * self.count_pool / self.M_IN_KM / self.duration
+        return self.length_pool * self.count_pool \
+               / self.M_IN_KM / self.duration
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        self.coeff_calorie_3 = (self.get_mean_speed() + 1.1) * 2 * self.weight
+        self.coeff_calorie_3 = (self.get_mean_speed() + 1.1) \
+                               * 2 * self.weight
         return self.coeff_calorie_3
 
 
@@ -125,7 +144,6 @@ def main(training: Training) -> None:
 
     info = training.show_training_info()
     print(info.get_message())
-
 
 
 if __name__ == '__main__':
