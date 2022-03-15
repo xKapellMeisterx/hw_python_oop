@@ -1,9 +1,10 @@
 from dataclasses import dataclass, asdict
+from typing import Type
 
 
 @dataclass
 class InfoMessage:
-    """Информация о тренировке."""
+    """Базовый класс тренировки."""
 
     training_type: str
     duration: float
@@ -17,7 +18,7 @@ class InfoMessage:
                     'Потрачено ккал: {calories:.3f}.')
 
     def get_message(self):
-        """Наполнение информации о тренировке в MESSAGE."""
+        """Наполнение информации о выполненно тренировке в MESSAGE."""
         return self.MESSAGE.format(**asdict(self))
 
 
