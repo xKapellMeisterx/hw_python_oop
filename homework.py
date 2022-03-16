@@ -1,5 +1,5 @@
-from dataclasses import dataclass, asdict
-from typing import Type
+from dataclasses import asdict, dataclass
+from typing import List, Type
 
 
 @dataclass
@@ -49,7 +49,8 @@ class Training:
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         raise NotImplementedError(
-            'Определите \"def get_spent_calories\" в наследнике')
+            f'В классе наследник {self.__class__.__name__} нужно определить '
+            f'метод get_spent_calories')
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
@@ -135,16 +136,17 @@ class Swimming(Training):
         return swimming_calories
 
 
-def read_package(workout_type: str, data: list) -> Training:
+def read_package(workout_type: str, data: List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    class_data: dict[str, Type[Swimming | Running | SportsWalking]] = {
+    class_data: dict[str, Type[Training]] = {
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking
     }
 
     if workout_type not in class_data:
-        raise KeyError('Неизвестный тип тренировки')
+        raise KeyError(f'{workout_type} - данный ключ отсутствует. '
+                       f'Доступные ключи: {list[class_data]} ')
     return class_data[workout_type](*data)
 
 
